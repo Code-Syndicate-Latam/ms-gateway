@@ -1,14 +1,63 @@
 server:
-  port: 8080
+  port: 8000
 spring:
   application:
     name: ms-gateway
+  config:
+    import:
+        - optional:configserver:http://localhost:8888
   cloud:
     gateway:
       server:
         webflux:
           routes:
             - id: ms-usuario
-              uri: http://localhost:64219
+              uri: lb://ms-usuario
               predicates:
-                - Path=/api/v1/usuarios/**
+                - Path=/usuario/**
+              filters:
+                - RewritePath=/usuario/(?<segment>.*), /api/v1/usuario/${segment}
+##                - TokenRelay=
+            - id: ms-authorization-server
+              uri: http://127.0.0.1:8085
+              predicates:
+                - Path= /**
+
+
+  security:
+    oauth2:
+  client:
+    registration:
+      gateway-client:
+        provider: spring
+        client-id: gateway-client
+        client-secret: gateway-secret_12345
+        authorization-grant-type: authorization_code
+        redirect-uri: "http://127.0.0.1:8000/authorized"
+        scope: openid, profile, read, accounts.read
+        client-name: gateway-client
+    provider:
+      spring:
+        issuer-uri: "http://127.0.0.1:8085"
+  resourceserver:
+    jwt:
+        issuer-uri: "http://localhost:8085"
+      ##jwk-set-uri: "http://localhost:8085"
+
+## No tocar la configuracion de eureka ##
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+    prefer-ip-address: true
+
+# para ver los logs de spring cloud gateway y loadbalancer
+logging:
+  level:
+    org.springframework.cloud: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: DEBUG
+    reactor.netty.http.client: DEBUG
