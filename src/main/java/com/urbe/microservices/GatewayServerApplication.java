@@ -1,10 +1,10 @@
-package com.softeam.microservices;
+package com.urbe.microservices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.urbe.microservices")
 @EnableDiscoveryClient
 public class GatewayServerApplication {
 

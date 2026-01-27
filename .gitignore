@@ -4,6 +4,15 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Configuración Sensible (Ignorar) ###
+src/main/resources/application.yml
+src/main/resources/application.properties
+src/main/resources/application-*.yml
+src/main/resources/application-*.properties
+src/main/resources/bootstrap.properties
+*.p12
+*.jks
+
 ### STS ###
 .apt_generated
 .classpath
@@ -28,6 +37,11 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+### Dotenv ###
+.env
+.env.*
+*.env
 
 ### VS Code ###
 .vscode/

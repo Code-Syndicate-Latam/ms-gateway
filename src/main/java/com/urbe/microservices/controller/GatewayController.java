@@ -1,4 +1,4 @@
-package com.softeam.microservices.controller;
+package com.urbe.microservices.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
